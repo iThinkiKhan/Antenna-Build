@@ -1,3 +1,5 @@
+_Initial testing shows the antenna to be suprisingly good. From my basement I am able to pick up NOAA clear from about 30 miles away. No problem picking up ship transponders from Lake Michigan, despite them being at a lower elevation, 15-20 miles away and the antenna being in a concrete half-basement. The suprising effectiveness of the antenna has led me to consider moving it to the attic rather than outside._
+
 
 This is a home made Dual-Band Fan Dipole style antenna I made out of common scrap materials. You could make this out of about anything - wire hangers and solder would do a pretty good job too. You do need an insulated coax cable for this design - the ones comcast gives out with new boxes work great. This can be totally free if you have the scrap, and is 10-20 dollars if you don't. It is surprisingly effective, especially using copper elements. The screw block terminals were chosen for stability, and largely determined the size of the pvc pipe. I had to shave the screw blocks down a bit to get them to fit snugly into the 1.25 pvc.
 
