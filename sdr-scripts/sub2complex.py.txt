@@ -1,0 +1,62 @@
+import sys
+import struct
+
+# Usage: python3 sub2complex.py input.sub output.cu8
+
+def main():
+    if len(sys.argv) < 3:
+        print("Usage: python3 sub2complex.py <input.sub> <output.cu8>")
+        sys.exit(1)
+
+    input_file = sys.argv[1]
+    output_file = sys.argv[2]
+    sample_rate = 500000  # 500k sample rate (Standard for simple OOK)
+
+    values = []
+
+    try:
+        with open(input_file, 'r') as f:
+            for line in f:
+                if "RAW_Data:" in line:
+                    data_part = line.split("RAW_Data:")[1]
+                    values.extend(data_part.split())
+    except FileNotFoundError:
+        print(f"Error: Could not find file {input_file}")
+        sys.exit(1)
+
+    if not values:
+        print("Error: No RAW_Data found in file.")
+        sys.exit(1)
+
+    print(f"Converting {len(values)} raw samples to Unsigned 8-bit IQ (.cu8)...")
+
+    with open(output_file, 'wb') as out:
+        for val in values:
+            try:
+                v = int(val)
+                # Calculate number of samples
+                num_samples = int(abs(v) * sample_rate / 1000000)
+
+                # Generate Unsigned 8-bit IQ Data
+                # Standard RTL-SDR format (.cu8):
+                # 0   = Max Negative
+                # 128 = Zero (Silence)
+                # 255 = Max Positive
+                
+                if v > 0:
+                    # Pulse: Amplitude High (I=255, Q=128)
+                    iq_pair = struct.pack('BB', 255, 128)
+                else:
+                    # Gap: Silence (I=128, Q=128)
+                    iq_pair = struct.pack('BB', 128, 128)
+
+                out.write(iq_pair * num_samples)
+            except ValueError:
+                continue 
+
+    print(f"Success! Saved to {output_file}")
+    print(f"IMPORTANT: Scan using: rtl_433 -s {sample_rate} -r {output_file}")
+
+if __name__ == "__main__":
+    main()
+
